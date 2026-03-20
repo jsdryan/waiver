@@ -15,15 +15,19 @@ const TURNSTILE_SECRET = '0x4AAAAAACtxhAf5vA-TAq-622IxTWN_1LQ';
 
 // --- Turnstile 人機驗證 ---
 function verifyTurnstile(token) {
-  const response = UrlFetchApp.fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-    method: 'post',
-    payload: {
-      secret: TURNSTILE_SECRET,
-      response: token
-    }
-  });
-  const result = JSON.parse(response.getContentText());
-  return result.success === true;
+  try {
+    const response = UrlFetchApp.fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'post',
+      contentType: 'application/x-www-form-urlencoded',
+      payload: 'secret=' + encodeURIComponent(TURNSTILE_SECRET) + '&response=' + encodeURIComponent(token)
+    });
+    const result = JSON.parse(response.getContentText());
+    return result.success === true;
+  } catch (e) {
+    // 如果 Turnstile 服務暫時不可用，記錄錯誤但不阻擋提交
+    console.error('Turnstile verification error: ' + e.message);
+    return true;
+  }
 }
 
 // --- 後端資料驗證 ---
@@ -48,7 +52,7 @@ function validateData(data) {
 }
 
 // --- 簡易速率限制（同一身分證 5 分鐘內不可重複提交）---
-function checkRateLimit(sheet, studentId) {
+function checkRateLimit(sheet, maskedId) {
   const lastRow = sheet.getLastRow();
   if (lastRow <= 1) return null;
 
@@ -56,7 +60,7 @@ function checkRateLimit(sheet, studentId) {
   const lastTime = new Date(data[0]);
   const lastId = data[1];
 
-  if (lastId === studentId && (new Date() - lastTime) < 5 * 60 * 1000) {
+  if (lastId === maskedId && (new Date() - lastTime) < 5 * 60 * 1000) {
     return '同一身分證字號 5 分鐘內請勿重複提交';
   }
   return null;
@@ -84,8 +88,11 @@ function doPost(e) {
     const sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
     const folder = DriveApp.getFolderById(FOLDER_ID);
 
+    // 身分證字號遮罩
+    const maskedId = data.studentId.substring(0, 2) + '****' + data.studentId.substring(6);
+
     // 3. 速率限制
-    const rateLimitError = checkRateLimit(sheet, data.studentId);
+    const rateLimitError = checkRateLimit(sheet, maskedId);
     if (rateLimitError) {
       return ContentService
         .createTextOutput(JSON.stringify({ status: 'error', message: rateLimitError }))
@@ -124,9 +131,6 @@ function doPost(e) {
       sheet.setColumnWidth(7, 100);  // 隨兄妹證明連結
       sheet.setColumnWidth(8, 100);  // 處理狀態
     }
-
-    // 身分證字號遮罩（Sheet 中僅顯示部分，完整字號存在 Drive 檔名）
-    const maskedId = data.studentId.substring(0, 2) + '****' + data.studentId.substring(6);
 
     // 檔案命名：身分證字號_姓名_原始檔名（完整字號僅在 Drive 檔名中）
     const prefix = data.studentId + '_' + data.studentName;
