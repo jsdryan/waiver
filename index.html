@@ -13,6 +13,7 @@
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -179,8 +180,17 @@
         </div>
       </div>
 
+      <!-- Turnstile 人機驗證 -->
+      <div class="card bg-white rounded-2xl shadow-sm border border-slate-200/80 p-4 sm:p-8 fade-in" style="animation-delay:0.25s">
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAABjor5115z8OhcPo" data-theme="light"></div>
+        <p id="turnstileError" class="text-red-500 text-xs mt-2 hidden flex items-center gap-1">
+          <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+          <span>請完成人機驗證</span>
+        </p>
+      </div>
+
       <!-- Submit & Clear -->
-      <div class="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-3 fade-in" style="animation-delay:0.25s">
+      <div class="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-3 fade-in" style="animation-delay:0.3s">
         <button
           type="submit"
           id="submitBtn"
@@ -350,6 +360,7 @@
         document.getElementById(prefix + 'FileInfo').classList.add('hidden');
       });
       document.querySelectorAll('[id$="Error"]').forEach(el => el.classList.add('hidden'));
+      if (typeof turnstile !== 'undefined') turnstile.reset();
     }
 
     function closeSuccessModal() {
@@ -389,8 +400,17 @@
       else if (waiverFile.size > 10 * 1024 * 1024) { showError('waiverFileError', '檔案大小不可超過 10 MB'); valid = false; }
       else { hideError('waiverFileError'); }
 
+      // Turnstile 人機驗證
+      const turnstileToken = document.querySelector('[name="cf-turnstile-response"]')?.value;
+      if (!turnstileToken) {
+        showError('turnstileError', '請完成人機驗證');
+        valid = false;
+      } else {
+        hideError('turnstileError');
+      }
+
       if (!valid) {
-        document.querySelector('.shake, [id$="Error"]:not(.hidden)')?.closest('.card')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        document.querySelector('[id$="Error"]:not(.hidden)')?.closest('.card')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
       }
 
@@ -405,6 +425,7 @@
 
       try {
         const payload = {
+          turnstileToken,
           studentId,
           studentName,
           waiverFileName: waiverFile.name,
