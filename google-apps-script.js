@@ -22,7 +22,6 @@ function doPost(e) {
     // 確認表頭（首次自動建立）
     if (sheet.getLastRow() === 0) {
       const headers = [
-        '序號',
         '提交時間',
         '學生身分證字號',
         '學生姓名',
@@ -43,15 +42,14 @@ function doPost(e) {
       sheet.setFrozenRows(1);
 
       // 設定欄寬
-      sheet.setColumnWidth(1, 50);   // 序號
-      sheet.setColumnWidth(2, 160);  // 提交時間
-      sheet.setColumnWidth(3, 130);  // 身分證字號
-      sheet.setColumnWidth(4, 80);   // 姓名
-      sheet.setColumnWidth(5, 160);  // 切結書檔名
-      sheet.setColumnWidth(6, 100);  // 切結書連結
-      sheet.setColumnWidth(7, 160);  // 隨兄妹證明檔名
-      sheet.setColumnWidth(8, 100);  // 隨兄妹證明連結
-      sheet.setColumnWidth(9, 100);  // 處理狀態
+      sheet.setColumnWidth(1, 160);  // 提交時間
+      sheet.setColumnWidth(2, 130);  // 身分證字號
+      sheet.setColumnWidth(3, 80);   // 姓名
+      sheet.setColumnWidth(4, 160);  // 切結書檔名
+      sheet.setColumnWidth(5, 100);  // 切結書連結
+      sheet.setColumnWidth(6, 160);  // 隨兄妹證明檔名
+      sheet.setColumnWidth(7, 100);  // 隨兄妹證明連結
+      sheet.setColumnWidth(8, 100);  // 處理狀態
     }
 
     // 檔案命名：身分證字號_姓名_原始檔名
@@ -82,13 +80,9 @@ function doPost(e) {
       siblingUrl = siblingFileObj.getUrl();
     }
 
-    // 計算序號
-    const rowNum = sheet.getLastRow();
-
     // 寫入 Google Sheet
     const newRow = sheet.getLastRow() + 1;
     sheet.appendRow([
-      rowNum,
       Utilities.formatDate(new Date(), 'Asia/Taipei', 'yyyy/MM/dd HH:mm:ss'),
       data.studentId,
       data.studentName,
@@ -100,7 +94,7 @@ function doPost(e) {
     ]);
 
     // 用 RichTextValue 設定可點擊的超連結（顯示「開啟檔案」而非長 URL）
-    const waiverLinkCell = sheet.getRange(newRow, 6);
+    const waiverLinkCell = sheet.getRange(newRow, 5);
     const waiverRichText = SpreadsheetApp.newRichTextValue()
       .setText('開啟檔案')
       .setLinkUrl(0, 4, waiverUrl)
@@ -108,7 +102,7 @@ function doPost(e) {
     waiverLinkCell.setRichTextValue(waiverRichText);
 
     if (siblingUrl) {
-      const siblingLinkCell = sheet.getRange(newRow, 8);
+      const siblingLinkCell = sheet.getRange(newRow, 7);
       const siblingRichText = SpreadsheetApp.newRichTextValue()
         .setText('開啟檔案')
         .setLinkUrl(0, 4, siblingUrl)
@@ -117,7 +111,7 @@ function doPost(e) {
     }
 
     // 設定「待處理」底色為黃色
-    sheet.getRange(newRow, 9).setBackground('#FEF3C7');
+    sheet.getRange(newRow, 8).setBackground('#FEF3C7');
 
     return ContentService
       .createTextOutput(JSON.stringify({ status: 'success' }))
