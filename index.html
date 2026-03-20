@@ -4,137 +4,181 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>文興國中115學年度新生放棄就讀切結書</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Noto Sans TC"', 'system-ui', 'sans-serif'] },
+        }
+      }
     }
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+  </script>
+  <style>
+    .card { transition: box-shadow 0.2s, border-color 0.2s; }
+    .card:focus-within { box-shadow: 0 0 0 2px rgba(99,102,241,0.15); border-color: #a5b4fc; }
+    .file-drop.dragover { border-color: #6366f1; background-color: #eef2ff; }
+    .fade-in { animation: fadeIn 0.3s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .shake { animation: shake 0.4s ease-in-out; }
+    @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
   </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-slate-100 font-sans">
+
+  <!-- Top accent bar -->
+  <div class="h-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
+
   <div class="max-w-2xl mx-auto px-4 py-8 sm:py-12">
-    <!-- Header -->
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 mb-6">
-      <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 mb-4">文興國中115學年度新生放棄就讀切結書</h1>
-      <div class="text-sm text-slate-600 space-y-3 leading-relaxed">
-        <p class="font-medium text-slate-700">填寫說明：</p>
-        <ol class="list-decimal list-inside space-y-2 pl-1">
-          <li>請依序完成表單內容填寫及檔案上傳。</li>
-          <li>若因<span class="font-medium">隨兄妹就讀</span>而放棄就讀本校，請務必完成第四題（隨兄妹就讀證明文件：兄妹在校證明或學生證）之檔案上傳。</li>
-          <li>新生放棄就讀切結書下載（附件08）：<br><a href="https://wxjh.hcc.edu.tw/p/406-1033-480746,r2330.php" class="text-indigo-600 hover:text-indigo-800 underline underline-offset-2 break-all" target="_blank">https://wxjh.hcc.edu.tw/p/406-1033-480746,r2330.php</a></li>
-        </ol>
+
+    <!-- Header Card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden mb-6 fade-in">
+      <div class="bg-gradient-to-r from-indigo-600 to-indigo-500 px-6 sm:px-8 py-5">
+        <h1 class="text-xl sm:text-2xl font-bold text-white tracking-wide">文興國中115學年度新生放棄就讀切結書</h1>
       </div>
-      <div class="mt-4 flex items-center gap-1.5 text-sm">
-        <span class="text-red-500 font-medium">*</span>
-        <span class="text-red-500">表示必填問題</span>
+      <div class="px-6 sm:px-8 py-5 space-y-4">
+        <div class="text-sm text-slate-600 leading-relaxed">
+          <p class="font-semibold text-slate-700 mb-2">填寫說明</p>
+          <ol class="list-decimal list-inside space-y-1.5 pl-1 marker:text-indigo-400 marker:font-semibold">
+            <li>請依序完成表單內容填寫及檔案上傳。</li>
+            <li>若因<span class="font-semibold text-slate-800">隨兄妹就讀</span>而放棄就讀本校，請務必完成第四題的檔案上傳。</li>
+            <li>
+              切結書下載（附件08）：
+              <a href="https://wxjh.hcc.edu.tw/p/406-1033-480746,r2330.php"
+                 class="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-700 underline underline-offset-2 break-all"
+                 target="_blank" rel="noopener">
+                前往下載
+                <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              </a>
+            </li>
+          </ol>
+        </div>
+        <div class="flex items-center gap-1.5 text-xs text-red-500 font-medium pt-1 border-t border-slate-100">
+          <span>*</span><span>表示必填問題</span>
+        </div>
       </div>
     </div>
 
-    <form id="waiverForm" class="space-y-4">
+    <form id="waiverForm" class="space-y-4" novalidate>
+
       <!-- 1. 學生身分證字號 -->
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
-        <label class="block text-base font-medium text-slate-800 mb-3">
+      <div class="card bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 sm:p-8 fade-in" style="animation-delay:0.05s">
+        <label for="studentId" class="block text-base font-semibold text-slate-800 mb-1">
           1. 學生身分證字號 <span class="text-red-500">*</span>
         </label>
+        <p class="text-xs text-slate-400 mb-3">格式：1 個英文字母 + 9 個數字，例如 A123456789</p>
         <input
           type="text"
           id="studentId"
           name="studentId"
           required
-          placeholder="您的回答"
-          class="w-full border-0 border-b-2 border-slate-200 focus:border-indigo-500 focus:ring-0 px-0 py-2 text-slate-700 placeholder-slate-400 transition-colors outline-none"
+          maxlength="10"
+          placeholder="請輸入身分證字號"
+          autocomplete="off"
+          class="w-full border-0 border-b-2 border-slate-200 focus:border-indigo-500 focus:ring-0 bg-transparent px-0 py-2 text-slate-700 placeholder-slate-300 transition-colors outline-none text-base"
         >
-        <p id="studentIdError" class="text-red-500 text-sm mt-2 hidden">這是必填問題</p>
+        <p id="studentIdError" class="text-red-500 text-xs mt-2 hidden flex items-center gap-1">
+          <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+          <span></span>
+        </p>
       </div>
 
       <!-- 2. 學生姓名 -->
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
-        <label class="block text-base font-medium text-slate-800 mb-3">
+      <div class="card bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 sm:p-8 fade-in" style="animation-delay:0.1s">
+        <label for="studentName" class="block text-base font-semibold text-slate-800 mb-1">
           2. 學生姓名 <span class="text-red-500">*</span>
         </label>
+        <p class="text-xs text-slate-400 mb-3">請填寫學生的中文全名</p>
         <input
           type="text"
           id="studentName"
           name="studentName"
           required
-          placeholder="您的回答"
-          class="w-full border-0 border-b-2 border-slate-200 focus:border-indigo-500 focus:ring-0 px-0 py-2 text-slate-700 placeholder-slate-400 transition-colors outline-none"
+          maxlength="20"
+          placeholder="請輸入學生姓名"
+          autocomplete="off"
+          class="w-full border-0 border-b-2 border-slate-200 focus:border-indigo-500 focus:ring-0 bg-transparent px-0 py-2 text-slate-700 placeholder-slate-300 transition-colors outline-none text-base"
         >
-        <p id="studentNameError" class="text-red-500 text-sm mt-2 hidden">這是必填問題</p>
+        <p id="studentNameError" class="text-red-500 text-xs mt-2 hidden flex items-center gap-1">
+          <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+          <span></span>
+        </p>
       </div>
 
       <!-- 3. 切結書上傳 -->
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
-        <label class="block text-base font-medium text-slate-800 mb-2">
+      <div class="card bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 sm:p-8 fade-in" style="animation-delay:0.15s">
+        <label class="block text-base font-semibold text-slate-800 mb-1">
           3. 切結書上傳 <span class="text-red-500">*</span>
         </label>
-        <p class="text-sm text-slate-500 mb-4">可上傳 1 個支援的檔案，大小上限為 10 MB。</p>
-        <div class="relative">
-          <input
-            type="file"
-            id="waiverFile"
-            name="waiverFile"
-            required
-            accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
-            class="hidden"
-          >
-          <button
-            type="button"
-            onclick="document.getElementById('waiverFile').click()"
-            class="inline-flex items-center gap-2 px-4 py-2.5 border-2 border-indigo-200 text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors text-sm font-medium"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+        <p class="text-xs text-slate-400 mb-4">支援 PDF、JPG、PNG、DOC、DOCX，大小上限 10 MB</p>
+        <input type="file" id="waiverFile" name="waiverFile" required accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" class="hidden">
+        <div id="waiverDrop" class="file-drop border-2 border-dashed border-slate-200 rounded-xl p-6 text-center cursor-pointer hover:border-indigo-400 hover:bg-indigo-50/50 transition-all">
+          <div id="waiverUploadUI">
+            <svg class="mx-auto h-10 w-10 text-slate-300 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 16V4m0 0L8 8m4-4l4 4M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1"/>
             </svg>
-            新增檔案
-          </button>
-          <span id="waiverFileName" class="ml-3 text-sm text-slate-500"></span>
+            <p class="text-sm text-slate-500">拖曳檔案到這裡，或<span class="text-indigo-600 font-medium">點擊選擇</span></p>
+          </div>
+          <div id="waiverFileInfo" class="hidden flex items-center justify-center gap-3">
+            <svg class="w-8 h-8 text-indigo-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+            <div class="text-left">
+              <p id="waiverFileName" class="text-sm font-medium text-slate-700 truncate max-w-[200px] sm:max-w-xs"></p>
+              <p id="waiverFileSize" class="text-xs text-slate-400"></p>
+            </div>
+            <button type="button" id="waiverRemove" class="ml-2 text-slate-400 hover:text-red-500 transition-colors">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
         </div>
-        <p id="waiverFileError" class="text-red-500 text-sm mt-2 hidden">這是必填問題</p>
+        <p id="waiverFileError" class="text-red-500 text-xs mt-2 hidden flex items-center gap-1">
+          <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+          <span></span>
+        </p>
       </div>
 
       <!-- 4. 隨兄妹就讀證明文件 -->
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
-        <label class="block text-base font-medium text-slate-800 mb-2">
-          4. 隨兄妹就讀證明文件(兄妹在校證明或學生證)
+      <div class="card bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 sm:p-8 fade-in" style="animation-delay:0.2s">
+        <label class="block text-base font-semibold text-slate-800 mb-1">
+          4. 隨兄妹就讀證明文件
         </label>
-        <p class="text-sm text-slate-500 mb-4">可上傳 1 個支援的檔案，大小上限為 10 MB。</p>
-        <div class="relative">
-          <input
-            type="file"
-            id="siblingFile"
-            name="siblingFile"
-            accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
-            class="hidden"
-          >
-          <button
-            type="button"
-            onclick="document.getElementById('siblingFile').click()"
-            class="inline-flex items-center gap-2 px-4 py-2.5 border-2 border-indigo-200 text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors text-sm font-medium"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+        <p class="text-xs text-slate-400 mb-4">兄妹在校證明或學生證，支援 PDF、JPG、PNG、DOC、DOCX，大小上限 10 MB</p>
+        <input type="file" id="siblingFile" name="siblingFile" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" class="hidden">
+        <div id="siblingDrop" class="file-drop border-2 border-dashed border-slate-200 rounded-xl p-6 text-center cursor-pointer hover:border-indigo-400 hover:bg-indigo-50/50 transition-all">
+          <div id="siblingUploadUI">
+            <svg class="mx-auto h-10 w-10 text-slate-300 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 16V4m0 0L8 8m4-4l4 4M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1"/>
             </svg>
-            新增檔案
-          </button>
-          <span id="siblingFileName" class="ml-3 text-sm text-slate-500"></span>
+            <p class="text-sm text-slate-500">拖曳檔案到這裡，或<span class="text-indigo-600 font-medium">點擊選擇</span></p>
+          </div>
+          <div id="siblingFileInfo" class="hidden flex items-center justify-center gap-3">
+            <svg class="w-8 h-8 text-indigo-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+            <div class="text-left">
+              <p id="siblingFileName" class="text-sm font-medium text-slate-700 truncate max-w-[200px] sm:max-w-xs"></p>
+              <p id="siblingFileSize" class="text-xs text-slate-400"></p>
+            </div>
+            <button type="button" id="siblingRemove" class="ml-2 text-slate-400 hover:text-red-500 transition-colors">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
         </div>
       </div>
 
       <!-- Submit & Clear -->
-      <div class="flex items-center justify-between pt-2">
+      <div class="flex items-center justify-between pt-3 fade-in" style="animation-delay:0.25s">
         <button
           type="submit"
           id="submitBtn"
-          class="px-8 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 active:bg-indigo-800 transition-colors font-medium shadow-sm"
+          class="group px-8 py-3 bg-gradient-to-r from-indigo-600 to-indigo-500 text-white rounded-xl hover:from-indigo-700 hover:to-indigo-600 active:scale-[0.98] transition-all font-semibold shadow-md shadow-indigo-200 flex items-center gap-2"
         >
           提交
+          <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
         </button>
         <button
           type="button"
           onclick="clearForm()"
-          class="text-sm text-indigo-600 hover:text-indigo-800 transition-colors font-medium"
+          class="text-sm text-slate-400 hover:text-red-500 transition-colors font-medium"
         >
           清除表單
         </button>
@@ -143,59 +187,154 @@
 
     <!-- Loading Overlay -->
     <div id="loadingOverlay" class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center">
-      <div class="bg-white rounded-2xl p-8 shadow-xl flex flex-col items-center gap-4">
-        <svg class="animate-spin h-10 w-10 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-        </svg>
+      <div class="bg-white rounded-2xl p-8 shadow-2xl flex flex-col items-center gap-4 fade-in">
+        <div class="relative">
+          <div class="w-14 h-14 rounded-full border-4 border-indigo-100"></div>
+          <div class="absolute top-0 left-0 w-14 h-14 rounded-full border-4 border-transparent border-t-indigo-600 animate-spin"></div>
+        </div>
         <p class="text-slate-700 font-medium">正在提交表單，請稍候...</p>
+        <p class="text-xs text-slate-400">上傳檔案中，請勿關閉頁面</p>
       </div>
     </div>
 
     <!-- Success Modal -->
     <div id="successModal" class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center">
-      <div class="bg-white rounded-2xl p-8 shadow-xl max-w-sm mx-4 text-center">
-        <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg class="w-8 h-8 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <div class="bg-white rounded-2xl p-8 shadow-2xl max-w-sm mx-4 text-center fade-in">
+        <div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-4 ring-4 ring-emerald-100">
+          <svg class="w-8 h-8 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h3 class="text-xl font-bold text-slate-800 mb-2">提交成功！</h3>
-        <p class="text-slate-600 mb-6">您的切結書已成功提交。</p>
-        <button onclick="closeSuccessModal()" class="px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium">
+        <h3 class="text-xl font-bold text-slate-800 mb-1">提交成功！</h3>
+        <p class="text-slate-500 text-sm mb-6">您的切結書已成功提交，感謝您的配合。</p>
+        <button onclick="closeSuccessModal()" class="w-full px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-indigo-500 text-white rounded-xl hover:from-indigo-700 hover:to-indigo-600 transition-all font-medium shadow-md shadow-indigo-200">
           確定
         </button>
       </div>
     </div>
 
     <!-- Footer -->
-    <div class="text-center mt-8 text-sm text-slate-400">
-      <p>此表單由新竹縣立文興國中建立。</p>
+    <div class="text-center mt-10 text-xs text-slate-300">
+      <p>此表單由新竹縣立文興國中建立</p>
     </div>
   </div>
 
   <script>
-    // ============================================================
-    // 請將下方 SCRIPT_URL 替換為你的 Google Apps Script Web App URL
-    // ============================================================
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxAVXrFh09NwzOKuLh5ENnoXZhWjT4Q3BcKfC7Yo4T169GkdyWRjWpCVt4-PwkCnWXy/exec';
 
-    // File input display
-    document.getElementById('waiverFile').addEventListener('change', function () {
-      const name = this.files[0] ? this.files[0].name : '';
-      document.getElementById('waiverFileName').textContent = name;
-      if (name) document.getElementById('waiverFileError').classList.add('hidden');
+    // --- Validation helpers ---
+    function validateTWID(id) {
+      if (!/^[A-Z][12]\d{8}$/.test(id)) return false;
+      const mapping = 'ABCDEFGHJKLMNPQRSTUVXYWZIO';
+      const n = mapping.indexOf(id[0]) + 10;
+      const digits = [Math.floor(n / 10), n % 10, ...id.slice(1).split('').map(Number)];
+      const weights = [1, 9, 8, 7, 6, 5, 4, 3, 2, 1, 1];
+      const sum = digits.reduce((acc, d, i) => acc + d * weights[i], 0);
+      return sum % 10 === 0;
+    }
+
+    function validateName(name) {
+      return /^[\u4e00-\u9fff]{2,10}$/.test(name);
+    }
+
+    function showError(id, message) {
+      const el = document.getElementById(id);
+      el.querySelector('span').textContent = message;
+      el.classList.remove('hidden');
+      el.closest('.card')?.classList.add('shake');
+      setTimeout(() => el.closest('.card')?.classList.remove('shake'), 400);
+    }
+
+    function hideError(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    // --- File upload UI (drag & drop + click) ---
+    function setupFileUpload(inputId, dropId, uploadUIId, fileInfoId, fileNameId, fileSizeId, removeId, errorId) {
+      const input = document.getElementById(inputId);
+      const drop = document.getElementById(dropId);
+      const uploadUI = document.getElementById(uploadUIId);
+      const fileInfo = document.getElementById(fileInfoId);
+      const fileName = document.getElementById(fileNameId);
+      const fileSize = document.getElementById(fileSizeId);
+      const removeBtn = document.getElementById(removeId);
+
+      function showFile(file) {
+        if (file.size > 10 * 1024 * 1024) {
+          if (errorId) showError(errorId, '檔案大小不可超過 10 MB');
+          return;
+        }
+        const allowed = ['application/pdf','image/jpeg','image/png','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+        if (!allowed.includes(file.type) && !/\.(pdf|jpe?g|png|docx?)$/i.test(file.name)) {
+          if (errorId) showError(errorId, '不支援的檔案格式');
+          return;
+        }
+        fileName.textContent = file.name;
+        fileSize.textContent = formatFileSize(file.size);
+        uploadUI.classList.add('hidden');
+        fileInfo.classList.remove('hidden');
+        if (errorId) hideError(errorId);
+      }
+
+      drop.addEventListener('click', () => input.click());
+
+      drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('dragover'); });
+      drop.addEventListener('dragleave', () => drop.classList.remove('dragover'));
+      drop.addEventListener('drop', (e) => {
+        e.preventDefault();
+        drop.classList.remove('dragover');
+        if (e.dataTransfer.files.length) {
+          const dt = new DataTransfer();
+          dt.items.add(e.dataTransfer.files[0]);
+          input.files = dt.files;
+          showFile(e.dataTransfer.files[0]);
+        }
+      });
+
+      input.addEventListener('change', function () {
+        if (this.files[0]) showFile(this.files[0]);
+      });
+
+      removeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        input.value = '';
+        uploadUI.classList.remove('hidden');
+        fileInfo.classList.add('hidden');
+      });
+    }
+
+    setupFileUpload('waiverFile', 'waiverDrop', 'waiverUploadUI', 'waiverFileInfo', 'waiverFileName', 'waiverFileSize', 'waiverRemove', 'waiverFileError');
+    setupFileUpload('siblingFile', 'siblingDrop', 'siblingUploadUI', 'siblingFileInfo', 'siblingFileName', 'siblingFileSize', 'siblingRemove', null);
+
+    // --- Real-time validation on blur ---
+    document.getElementById('studentId').addEventListener('blur', function () {
+      const v = this.value.trim().toUpperCase();
+      this.value = v;
+      if (!v) { showError('studentIdError', '此欄位為必填'); }
+      else if (!validateTWID(v)) { showError('studentIdError', '身分證字號格式不正確，請確認後重新輸入'); }
+      else { hideError('studentIdError'); }
     });
 
-    document.getElementById('siblingFile').addEventListener('change', function () {
-      const name = this.files[0] ? this.files[0].name : '';
-      document.getElementById('siblingFileName').textContent = name;
+    document.getElementById('studentName').addEventListener('blur', function () {
+      const v = this.value.trim();
+      if (!v) { showError('studentNameError', '此欄位為必填'); }
+      else if (!validateName(v)) { showError('studentNameError', '請輸入 2-10 個中文字'); }
+      else { hideError('studentNameError'); }
     });
 
+    // --- Clear form ---
     function clearForm() {
       document.getElementById('waiverForm').reset();
-      document.getElementById('waiverFileName').textContent = '';
-      document.getElementById('siblingFileName').textContent = '';
+      ['waiver', 'sibling'].forEach(prefix => {
+        document.getElementById(prefix + 'UploadUI').classList.remove('hidden');
+        document.getElementById(prefix + 'FileInfo').classList.add('hidden');
+      });
       document.querySelectorAll('[id$="Error"]').forEach(el => el.classList.add('hidden'));
     }
 
@@ -213,41 +352,31 @@
       });
     }
 
+    // --- Submit ---
     document.getElementById('waiverForm').addEventListener('submit', async function (e) {
       e.preventDefault();
 
-      // Validate
       let valid = true;
-      const studentId = document.getElementById('studentId').value.trim();
+      const studentId = document.getElementById('studentId').value.trim().toUpperCase();
       const studentName = document.getElementById('studentName').value.trim();
       const waiverFile = document.getElementById('waiverFile').files[0];
 
-      if (!studentId) {
-        document.getElementById('studentIdError').classList.remove('hidden');
-        valid = false;
-      } else {
-        document.getElementById('studentIdError').classList.add('hidden');
-      }
+      document.getElementById('studentId').value = studentId;
 
-      if (!studentName) {
-        document.getElementById('studentNameError').classList.remove('hidden');
-        valid = false;
-      } else {
-        document.getElementById('studentNameError').classList.add('hidden');
-      }
+      if (!studentId) { showError('studentIdError', '此欄位為必填'); valid = false; }
+      else if (!validateTWID(studentId)) { showError('studentIdError', '身分證字號格式不正確，請確認後重新輸入'); valid = false; }
+      else { hideError('studentIdError'); }
 
-      if (!waiverFile) {
-        document.getElementById('waiverFileError').classList.remove('hidden');
-        valid = false;
-      } else {
-        document.getElementById('waiverFileError').classList.add('hidden');
-      }
+      if (!studentName) { showError('studentNameError', '此欄位為必填'); valid = false; }
+      else if (!validateName(studentName)) { showError('studentNameError', '請輸入 2-10 個中文字'); valid = false; }
+      else { hideError('studentNameError'); }
 
-      if (!valid) return;
+      if (!waiverFile) { showError('waiverFileError', '請上傳切結書檔案'); valid = false; }
+      else if (waiverFile.size > 10 * 1024 * 1024) { showError('waiverFileError', '檔案大小不可超過 10 MB'); valid = false; }
+      else { hideError('waiverFileError'); }
 
-      // Check file size (10 MB)
-      if (waiverFile.size > 10 * 1024 * 1024) {
-        alert('切結書檔案大小不可超過 10 MB');
+      if (!valid) {
+        document.querySelector('.shake, [id$="Error"]:not(.hidden)')?.closest('.card')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
       }
 
@@ -257,14 +386,13 @@
         return;
       }
 
-      // Show loading
       document.getElementById('loadingOverlay').classList.remove('hidden');
       document.getElementById('submitBtn').disabled = true;
 
       try {
         const payload = {
-          studentId: studentId,
-          studentName: studentName,
+          studentId,
+          studentName,
           waiverFileName: waiverFile.name,
           waiverFileType: waiverFile.type,
           waiverFileData: await fileToBase64(waiverFile),
@@ -276,14 +404,13 @@
           payload.siblingFileData = await fileToBase64(siblingFile);
         }
 
-        const response = await fetch(SCRIPT_URL, {
+        await fetch(SCRIPT_URL, {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'text/plain' },
           body: JSON.stringify(payload),
         });
 
-        // no-cors returns opaque response, so we assume success
         document.getElementById('loadingOverlay').classList.add('hidden');
         document.getElementById('successModal').classList.remove('hidden');
       } catch (error) {
