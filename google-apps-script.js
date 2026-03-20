@@ -13,7 +13,7 @@
 // 6. 複製部署後的 URL，貼到 index.html 的 SCRIPT_URL
 // ============================================================
 
-const SHEET_ID = 'YOUR_GOOGLE_SHEET_ID';
+const SHEET_ID = '1wgQGr9TSMcCPbDkkSUHOR_atrW6iUs0Wv5oqMtCybNU';
 const FOLDER_ID = 'YOUR_GOOGLE_DRIVE_FOLDER_ID';
 
 function doPost(e) {
