@@ -11,7 +11,7 @@
 
 const SHEET_ID = '1wgQGr9TSMcCPbDkkSUHOR_atrW6iUs0Wv5oqMtCybNU';
 const FOLDER_ID = '165bN7W2mN2FRSuyBfHg0MbhYev8N6clH';
-const TURNSTILE_SECRET = '0x4AAAAAABjosJBBxTZHaYQXHK9E_kqSVxo';
+const TURNSTILE_SECRET = '0x4AAAAAACtxhAf5vA-TAq-622IxTWN_1LQ';
 
 // --- Turnstile 人機驗證 ---
 function verifyTurnstile(token) {
