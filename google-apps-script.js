@@ -14,7 +14,7 @@
 // ============================================================
 
 const SHEET_ID = '1wgQGr9TSMcCPbDkkSUHOR_atrW6iUs0Wv5oqMtCybNU';
-const FOLDER_ID = 'YOUR_GOOGLE_DRIVE_FOLDER_ID';
+const FOLDER_ID = '165bN7W2mN2FRSuyBfHg0MbhYev8N6clH';
 
 function doPost(e) {
   try {
