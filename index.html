@@ -236,15 +236,18 @@
       </div>
     </form>
 
-    <!-- Loading Overlay -->
+    <!-- Loading Overlay with Progress -->
     <div id="loadingOverlay" class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center px-4">
       <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-2xl flex flex-col items-center gap-4 fade-in w-full max-w-xs">
         <div class="relative">
           <div class="w-14 h-14 rounded-full border-4 border-indigo-100"></div>
           <div class="absolute top-0 left-0 w-14 h-14 rounded-full border-4 border-transparent border-t-indigo-600 animate-spin"></div>
         </div>
-        <p class="text-slate-700 font-medium">正在提交表單，請稍候...</p>
-        <p class="text-xs text-slate-400">上傳檔案中，請勿關閉頁面</p>
+        <p id="loadingText" class="text-slate-700 font-medium text-center">準備上傳中...</p>
+        <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+          <div id="progressBar" class="h-full bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-full transition-all duration-300 ease-out" style="width: 0%"></div>
+        </div>
+        <p id="progressText" class="text-xs text-slate-400">0%</p>
       </div>
     </div>
 
@@ -459,7 +462,19 @@
       document.getElementById('loadingOverlay').classList.remove('hidden');
       document.getElementById('submitBtn').disabled = true;
 
+      const progressBar = document.getElementById('progressBar');
+      const progressText = document.getElementById('progressText');
+      const loadingText = document.getElementById('loadingText');
+
+      function setProgress(pct, text) {
+        progressBar.style.width = pct + '%';
+        progressText.textContent = pct + '%';
+        if (text) loadingText.textContent = text;
+      }
+
       try {
+        setProgress(5, '正在讀取檔案...');
+
         const payload = {
           turnstileToken,
           studentId,
@@ -468,19 +483,47 @@
           waiverFileType: waiverFile.type,
           waiverFileData: await fileToBase64(waiverFile),
         };
+        setProgress(30, '檔案讀取完成');
 
         if (siblingFile) {
+          setProgress(35, '正在讀取第二份檔案...');
           payload.siblingFileName = siblingFile.name;
           payload.siblingFileType = siblingFile.type;
           payload.siblingFileData = await fileToBase64(siblingFile);
+          setProgress(55, '檔案讀取完成');
+        } else {
+          setProgress(55);
         }
 
-        await fetch(SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain' },
-          body: JSON.stringify(payload),
+        setProgress(60, '正在上傳資料...');
+
+        // 使用 XMLHttpRequest 追蹤上傳進度
+        await new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+
+          xhr.upload.addEventListener('progress', (e) => {
+            if (e.lengthComputable) {
+              const uploadPct = Math.round((e.loaded / e.total) * 30);
+              setProgress(60 + uploadPct, '正在上傳資料... (' + Math.round(e.loaded / 1024) + ' KB)');
+            }
+          });
+
+          xhr.addEventListener('load', () => {
+            setProgress(95, '伺服器處理中...');
+            resolve();
+          });
+
+          xhr.addEventListener('error', () => reject(new Error('網路錯誤')));
+          xhr.addEventListener('timeout', () => reject(new Error('上傳逾時')));
+
+          xhr.open('POST', SCRIPT_URL);
+          xhr.timeout = 120000;
+          xhr.setRequestHeader('Content-Type', 'text/plain');
+          xhr.send(JSON.stringify(payload));
         });
+
+        setProgress(100, '上傳完成！');
+        await new Promise(r => setTimeout(r, 400));
 
         document.getElementById('loadingOverlay').classList.add('hidden');
         document.getElementById('successModal').classList.remove('hidden');
@@ -489,6 +532,7 @@
         alert('提交失敗，請稍後再試。錯誤：' + error.message);
       } finally {
         document.getElementById('submitBtn').disabled = false;
+        setProgress(0, '準備上傳中...');
       }
     });
   </script>
