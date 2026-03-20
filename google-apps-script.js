@@ -103,7 +103,7 @@ function doPost(e) {
     const waiverLinkCell = sheet.getRange(newRow, 6);
     const waiverRichText = SpreadsheetApp.newRichTextValue()
       .setText('開啟檔案')
-      .setLinkUrl('開啟檔案', waiverUrl)
+      .setLinkUrl(0, 4, waiverUrl)
       .build();
     waiverLinkCell.setRichTextValue(waiverRichText);
 
@@ -111,7 +111,7 @@ function doPost(e) {
       const siblingLinkCell = sheet.getRange(newRow, 8);
       const siblingRichText = SpreadsheetApp.newRichTextValue()
         .setText('開啟檔案')
-        .setLinkUrl('開啟檔案', siblingUrl)
+        .setLinkUrl(0, 4, siblingUrl)
         .build();
       siblingLinkCell.setRichTextValue(siblingRichText);
     }
