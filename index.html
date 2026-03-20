@@ -495,33 +495,27 @@
           setProgress(55);
         }
 
-        setProgress(60, '正在上傳資料...');
+        setProgress(60, '正在上傳至伺服器...');
 
-        // 使用 XMLHttpRequest 追蹤上傳進度
-        await new Promise((resolve, reject) => {
-          const xhr = new XMLHttpRequest();
+        // 模擬上傳進度（no-cors 無法追蹤實際進度）
+        let uploadProgress = 60;
+        const progressInterval = setInterval(() => {
+          if (uploadProgress < 90) {
+            uploadProgress += Math.random() * 3;
+            setProgress(Math.min(Math.round(uploadProgress), 90), '正在上傳至伺服器...');
+          }
+        }, 500);
 
-          xhr.upload.addEventListener('progress', (e) => {
-            if (e.lengthComputable) {
-              const uploadPct = Math.round((e.loaded / e.total) * 30);
-              setProgress(60 + uploadPct, '正在上傳資料... (' + Math.round(e.loaded / 1024) + ' KB)');
-            }
-          });
-
-          xhr.addEventListener('load', () => {
-            setProgress(95, '伺服器處理中...');
-            resolve();
-          });
-
-          xhr.addEventListener('error', () => reject(new Error('網路錯誤')));
-          xhr.addEventListener('timeout', () => reject(new Error('上傳逾時')));
-
-          xhr.open('POST', SCRIPT_URL);
-          xhr.timeout = 120000;
-          xhr.setRequestHeader('Content-Type', 'text/plain');
-          xhr.send(JSON.stringify(payload));
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify(payload),
         });
 
+        clearInterval(progressInterval);
+        setProgress(95, '伺服器處理中...');
+        await new Promise(r => setTimeout(r, 300));
         setProgress(100, '上傳完成！');
         await new Promise(r => setTimeout(r, 400));
 
