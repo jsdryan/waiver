@@ -180,6 +180,33 @@
         </div>
       </div>
 
+      <!-- 個資聲明與同意 -->
+      <div class="card bg-white rounded-2xl shadow-sm border border-slate-200/80 p-4 sm:p-8 fade-in" style="animation-delay:0.25s">
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-4">
+          <p class="text-sm font-semibold text-amber-800 mb-2">個人資料蒐集告知事項</p>
+          <div class="text-xs text-amber-700 space-y-1 leading-relaxed">
+            <p>依據《個人資料保護法》第 8 條規定，告知您以下事項：</p>
+            <ol class="list-decimal list-inside space-y-0.5 pl-1">
+              <li><strong>蒐集機關：</strong>新竹縣立文興國民中學</li>
+              <li><strong>蒐集目的：</strong>新生入學作業之放棄就讀切結書申請</li>
+              <li><strong>個資類別：</strong>學生身分證字號、姓名及相關證明文件</li>
+              <li><strong>利用期間：</strong>該學年度招生作業完成後銷毀</li>
+              <li><strong>利用地區：</strong>中華民國境內</li>
+              <li><strong>利用對象：</strong>本校教務處相關承辦人員</li>
+              <li><strong>您的權利：</strong>得依個資法第 3 條規定，行使查詢、閱覽、複製、補充、更正、停止蒐集、處理或利用、刪除等權利</li>
+            </ol>
+          </div>
+        </div>
+        <label class="flex items-start gap-3 cursor-pointer group">
+          <input type="checkbox" id="privacyConsent" class="mt-0.5 w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500">
+          <span class="text-sm text-slate-700 group-hover:text-slate-900">我已閱讀上述個資告知事項，並同意新竹縣立文興國民中學於上述範圍內蒐集、處理及利用本人所提供之個人資料。<span class="text-red-500"> *</span></span>
+        </label>
+        <p id="privacyError" class="text-red-500 text-xs mt-2 hidden flex items-center gap-1">
+          <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+          <span>請勾選同意後才能提交</span>
+        </p>
+      </div>
+
       <!-- Turnstile 人機驗證 -->
       <div class="card bg-white rounded-2xl shadow-sm border border-slate-200/80 p-4 sm:p-8 fade-in" style="animation-delay:0.25s">
         <div class="cf-turnstile" data-sitekey="0x4AAAAAACtxhNiheiwvx_j-" data-theme="light"></div>
@@ -399,6 +426,15 @@
       if (!waiverFile) { showError('waiverFileError', '請上傳切結書檔案'); valid = false; }
       else if (waiverFile.size > 10 * 1024 * 1024) { showError('waiverFileError', '檔案大小不可超過 10 MB'); valid = false; }
       else { hideError('waiverFileError'); }
+
+      // 個資同意勾選
+      const privacyConsent = document.getElementById('privacyConsent').checked;
+      if (!privacyConsent) {
+        showError('privacyError', '請勾選同意後才能提交');
+        valid = false;
+      } else {
+        hideError('privacyError');
+      }
 
       // Turnstile 人機驗證
       const turnstileToken = document.querySelector('[name="cf-turnstile-response"]')?.value;

@@ -125,7 +125,10 @@ function doPost(e) {
       sheet.setColumnWidth(8, 100);  // 處理狀態
     }
 
-    // 檔案命名：身分證字號_姓名_原始檔名
+    // 身分證字號遮罩（Sheet 中僅顯示部分，完整字號存在 Drive 檔名）
+    const maskedId = data.studentId.substring(0, 2) + '****' + data.studentId.substring(6);
+
+    // 檔案命名：身分證字號_姓名_原始檔名（完整字號僅在 Drive 檔名中）
     const prefix = data.studentId + '_' + data.studentName;
 
     // 儲存切結書檔案到 Google Drive（不設公開分享，僅擁有者可存取）
@@ -155,7 +158,7 @@ function doPost(e) {
     const newRow = sheet.getLastRow() + 1;
     sheet.appendRow([
       Utilities.formatDate(new Date(), 'Asia/Taipei', 'yyyy/MM/dd HH:mm:ss'),
-      data.studentId,
+      maskedId,
       data.studentName,
       data.waiverFileName,
       '',  // 切結書連結
