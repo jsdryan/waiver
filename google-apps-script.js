@@ -52,7 +52,7 @@ function validateData(data) {
 }
 
 // --- 簡易速率限制（同一身分證 5 分鐘內不可重複提交）---
-function checkRateLimit(sheet, maskedId) {
+function checkRateLimit(sheet, studentId) {
   const lastRow = sheet.getLastRow();
   if (lastRow <= 1) return null;
 
@@ -60,7 +60,7 @@ function checkRateLimit(sheet, maskedId) {
   const lastTime = new Date(data[0]);
   const lastId = data[1];
 
-  if (lastId === maskedId && (new Date() - lastTime) < 5 * 60 * 1000) {
+  if (lastId === studentId && (new Date() - lastTime) < 5 * 60 * 1000) {
     return '同一身分證字號 5 分鐘內請勿重複提交';
   }
   return null;
@@ -88,11 +88,10 @@ function doPost(e) {
     const sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
     const folder = DriveApp.getFolderById(FOLDER_ID);
 
-    // 身分證字號遮罩
-    const maskedId = data.studentId.substring(0, 2) + '****' + data.studentId.substring(6);
+    const studentId = data.studentId;
 
     // 3. 速率限制
-    const rateLimitError = checkRateLimit(sheet, maskedId);
+    const rateLimitError = checkRateLimit(sheet, studentId);
     if (rateLimitError) {
       return ContentService
         .createTextOutput(JSON.stringify({ status: 'error', message: rateLimitError }))
@@ -162,7 +161,7 @@ function doPost(e) {
     const newRow = sheet.getLastRow() + 1;
     sheet.appendRow([
       Utilities.formatDate(new Date(), 'Asia/Taipei', 'yyyy/MM/dd HH:mm:ss'),
-      maskedId,
+      studentId,
       data.studentName,
       data.waiverFileName,
       '',  // 切結書連結
